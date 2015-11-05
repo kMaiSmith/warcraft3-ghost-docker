@@ -3,19 +3,20 @@ MAINTAINER Kyle Smith <kmaismith@gmail.com>
 
 RUN apt-get update
 RUN apt-get install --yes --force-yes \
-                    gcc g++ dpkg-dev libc6-dev make libgmp3-dev libbz2-dev libmysql++-dev wget unzip \
-                    libboost-dev libboost-system-dev libboost-date-time-dev libboost-thread-dev libboost-filesystem-dev
+                    bzip2 tar build-essential g++ libmysql++-dev wget unzip libbz2-dev \
+                    libgmp3-dev git libboost-all-dev
 WORKDIR /root
 
-RUN wget http://ghostplusplus.googlecode.com/files/ghostplusplus_17.1.zip -O ghost++.zip && \
-    unzip ghost++.zip
+RUN wget https://github.com/OHSystem/OHSystem/archive/master.zip -O master.zip && \
+    unzip master.zip
 
 COPY bin/buildGHost.sh /root/buildGHost.sh
 RUN /root/buildGHost.sh
 
-WORKDIR /root/ghost
+WORKDIR /root/OHSystem-master/ghost
 RUN mkdir /opt/ghost++; \
-    cp -R maps/ mapcfgs/ replays/ savegames/ ghost/ghost++ default.cfg gameloaded.txt gameover.txt ipblacklist.txt ip-to-country.csv /opt/ghost++/
+    cp -R src/ghost++ config/* /opt/ghost++/
+COPY config/* /opt/ghosts++/
 
 EXPOSE 6112 6113 6114
 CMD /opt/ghost++/ghost++
